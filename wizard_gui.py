@@ -1,10 +1,5 @@
 # wizard GUI
-import time
-
-#from naoqi import ALProxy
-#tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
-
-#import thread as ctrl
+import nico_controller as control
 
 from Tkinter import *
 
@@ -14,13 +9,14 @@ root = Tk()
 #modify root window
 root.title("Wizard GUI")
 #sets the width/height of window
-root.geometry("500x250")
+root.geometry("500x265")
 
 def call(code):
-	print code
+	cmd = str(code)
+	control.sendCmd(cmd) 
 
 #Buttons for every built-in dialog option
-#
+# casual response
 b1 = Button(root, text='Hi!', command=lambda: call(1), width=17)
 b1.grid(row=0,column=0)
 
@@ -30,7 +26,7 @@ b16.grid(row=0,column=1)
 b18 = Button(root, text='Okay!', command=lambda: call(18), width=17)
 b18.grid(row=0,column=2)
 
-#
+# prompting the user to go on
 b20 = Button(root, text='I want to solve this', command=lambda: call(20), width=17)
 b20.grid(row=1)
 
@@ -46,7 +42,7 @@ b8.grid(row=2)
 b13 = Button(root, text='Nevermind, go on.', command=lambda: call(13), width=17)
 b13.grid(row=2,column=1)
 
-#
+# response to specific solutions
 b3 = Button(root, text='Now we multiply?', command=lambda: call(3), width=17)
 b3.grid(row=2,column=2)
 
@@ -62,7 +58,7 @@ b19.grid(row=3,column=2)
 b21 = Button(root, text='How\'d we get that?', command=lambda: call(21), width=17)
 b21.grid(row=4)
 
-#
+# confused
 b7 = Button(root, text='That was a lot.', command=lambda: call(7), width=17)
 b7.grid(row=4,column=1)
 
@@ -75,7 +71,7 @@ b12.grid(row=5)
 b15 = Button(root, text='Don\'t know. Hint?', command=lambda: call(15), width=17)
 b15.grid(row=5,column=1)
 
-#
+# end
 b6 = Button(root, text='I understand now', command=lambda: call(6), width=17)
 b6.grid(row=5,column=2)
 
@@ -88,24 +84,29 @@ b10.grid(row=6,column=1)
 b14 = Button(root, text='Getting tired. Later?', command=lambda: call(14), width=17)
 b14.grid(row=6,column=2)
 
+# Make Nico turn his head to face forward
+b0 = Button(root, text="Face forward", command=lambda: call(0), width=17)
+b0.grid(row=7)
+
 # Enter anything for Nico to say
 entry = Entry()
-entry.grid(row=7)
+entry.grid(row=7,column=1)
 
 eText = ""
+
 def onclick(event=None):
 	eText = entry.get()
-	print eText
-	# need to change the focus to delete the text that was just entered
-	# also need to pass it to nico to say
+	call(eText)
+	entry.delete(0,END)
 
 root.bind('<Return>', onclick)
 
 button = Button(root, text="Enter", command=onclick, width=17)
-button.grid(row=7, column=1)
+button.grid(row=7, column=2)
 
 # End the program immediately.
 bEnd = Button(root, text="End program", command=exit, width=17)
-bEnd.grid(row=7, column=2)
+bEnd.grid(row=8, column=1)
+
 #kick off the event loop
 root.mainloop()
