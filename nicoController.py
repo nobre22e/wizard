@@ -1,6 +1,14 @@
 #import adialog_new as ad
 from naoqi import ALProxy
 import nicoGestures as gesture
+import sys
+
+try:
+	tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
+except Exception,e:
+        print "Could not create proxy to ALTextToSpeech"
+        print "Error was: ",e
+	sys.exit(1)
 
 dialog = {
 	  ########## casual response ##############
@@ -34,55 +42,54 @@ dialog = {
 	
 #Hello
 def hello(command_dialog):
-    tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
     gesture.wave_hand()
     tts.say("Hello")
 
 def yay(command_dialog):
-    tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
+    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
     gesture.yay()
     tts.say(dialog[command_dialog])
 
 def peace(command_dialog):
-    tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
+    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
     gesture.peace()
     tts.say(dialog[command_dialog])
 	    
 #I M LOST
 def shrugAndShakeHead(command_dialog):
-    tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
+    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
     #tts.say(dialog[command_dialog])
     gesture.shrug_and_shakehead()
     tts.say(dialog[command_dialog])
 
 def oneHandUp(command_dialog):
-    tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
+    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
     gesture.one_hand_up()
     tts.say(dialog[command_dialog])
 
 #nodding
 def nod(command_dialog):
-    tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
+    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
     gesture.head_yaw()
     tts.say(dialog[command_dialog])
 
 def fistYay(command_dialog):
-    tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
+    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
     gesture.fistYay()
     tts.say(dialog[command_dialog])
 
 #nodding
 def shakeHead(command_dialog):
-    tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
+    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
     gesture.head_pitch()
     tts.say(dialog[command_dialog])
 
 def other(command_dialog):
-    tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
+    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
     tts.say(command_dialog)
 
 def shrug(command_dialog):
-    tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
+    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
     gesture.shrug()
     tts.say(dialog[command_dialog])
 
