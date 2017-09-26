@@ -1,5 +1,6 @@
 # wizard GUI
 import nicoController as control
+import time
 
 from Tkinter import *
 
@@ -9,115 +10,139 @@ root = Tk()
 #modify root window
 root.title("Wizard GUI")
 #sets the width/height of window
-root.geometry("500x465")
+root.geometry("500x580")
 
 def main():
+	#-------------Logging Setup-------------
 
+	# Set up the current time to be able to create the file
+	currtime = time.asctime( time.localtime(time.time()) )[4:16]
+	currtime = currtime.replace(" ", "-")
+	currtime = currtime.replace(":", "")
+	
+	# Create the filename using the date and time
+	filename = "log{}.txt".format(currtime)
+
+	# If the key has dialog associated with it, log it to the file
+	def writeFile(key):
+		if key not in {'0', '33', '34', '35'}:
+			currtime = time.asctime( time.localtime(time.time()) )
+			f = open(filename, "a")
+			f.write(currtime + " ")
+			if key.isdigit():
+				f.write(control.dialog[key] + "\n")
+			else:
+				f.write(key + "\n")
+			f.close()
+	
+
+	#-------------GUI Controls-------------
+
+	# Call the movement/dialog option and then write any dialog to the file
 	def call(code):
 		cmd = str(code)
-		control.sendCmd(cmd) 
+		control.sendCmd(cmd)
+		writeFile(cmd)
+	
+	menubar = Menu(root)
 
-	#Buttons for every built-in dialog option
+	#-------------Menu Bar Controls-------------
 
-	# greetings
-	greetings = Label(root, text = "Greetings")
-	greetings.grid(row = 0, column = 1)
+	# Introduction
+	intromenu = Menu(menubar, tearoff = 0)
+	intromenu.add_command(label = 'Hello!', command = lambda: call(1))
+	intromenu.add_command(label = 'I\'m ready to learn!', command = lambda: call(2))
+	intromenu.add_command(label = 'What are we solving?', command = lambda: call(3))
+	intromenu.add_command(label = 'I want to solve this.', command = lambda: call(4))
+	menubar.add_cascade(label = "Introduction", menu = intromenu)
 
-	b1 = Button(root, text = 'Hi!', command = lambda: call(1), width = 17)
-	b1.grid(row = 1,column = 0)
+	# Confirmation
+	confmenu = Menu(menubar)
+	confmenu.add_command(label = 'Okay!', command = lambda: call(5))
+	confmenu.add_command(label = 'Yes.', command = lambda: call(6))
+	confmenu.add_command(label = 'Yes, I agree.', command = lambda: call(7))
+	menubar.add_cascade(label = "Confirmation", menu = confmenu)
 
-	b16 = Button(root, text = 'I\'m excited!', command = lambda: call(16), width = 17)
-	b16.grid(row = 1,column = 1)
+	# Asking Questions
+	qmenu = Menu(menubar)
+	qmenu.add_command(label = 'How do we solve this?', command = lambda: call(8))
+	qmenu.add_command(label = 'What\'s next?', command = lambda: call(9))
+	qmenu.add_command(label = 'How do we do that?', command = lambda: call(10))
+	qmenu.add_command(label = 'More information?', command = lambda: call(11))
+	qmenu.add_command(label = 'Is this correct?', command = lambda: call(15))
+	qmenu.add_command(label = 'How do we start?', command = lambda: call(28))
+	qmenu.add_separator()
+	qmenu.add_command(label ='Now we subtract?', command = lambda: call(13))
+	qmenu.add_command(label = 'Now we multiply?', command = lambda: call(12))
+	qmenu.add_command(label = 'Now we divide?', command = lambda: call(14))
+	menubar.add_cascade(label = "Questions", menu = qmenu)
 
-	b20 = Button(root, text = 'I want to solve this', command = lambda: call(20), width = 17)
-	b20.grid(row = 1,column = 2)
+	# Confusion
+	confusemenu = Menu(menubar, tearoff = 0)
+	confusemenu.add_command(label = 'How\'d we get that?', command = lambda: call(16))
+	confusemenu.add_command(label = 'Break that down?', command = lambda: call(17))
+	confusemenu.add_command(label = 'Seems complicated.', command = lambda: call(18))
+	confusemenu.add_command(label = 'Don\'t know. Hints?', command = lambda: call(19))
+	menubar.add_cascade(label = 'Confusion', menu = confusemenu)
 
+	# Ending/Understanding
+	endmenu = Menu(menubar, tearoff = 0)
+	endmenu.add_command(label = 'I understand now.', command = lambda: call(20))
+	endmenu.add_command(label = 'Think it\'s correct.', command = lambda: call(21))
+	qmenu.add_separator()
+	endmenu.add_command(label = 'Solved the problem!', command = lambda: call(22))
+	endmenu.add_command(label = 'Thank you!', command = lambda: call(23))
+	endmenu.add_command(label = 'Getting tired. Later?', command = lambda: call(24))
+	menubar.add_cascade(label = "Ending", menu = endmenu)
 
-	# prompting the user to go on
-	goOn = Label(root, text = "Go On")
-	goOn.grid(row = 2,column = 1)
+	# What We Know
+	knowmenu = Menu(menubar, tearoff = 0)
+	knowmenu.add_command(label = 'I know painting.', command = lambda: call(25))
+	knowmenu.add_command(label = 'I know driving.', command = lambda: call(26))
+	knowmenu.add_command(label = 'I know swimming.', command = lambda: call(27))
 
-	b18 = Button(root, text = 'Okay!', command = lambda: call(18), width = 17)
-	b18.grid(row = 3)
+	menubar.add_cascade(label = "I know...", menu = knowmenu)
 
-	b2 = Button(root, text = 'How do you solve this?', command = lambda: call(2), width = 17)
-	b2.grid(row = 3,column = 1)
+	# Survey Questions
+	surveymenu = Menu(menubar)
+	surveymenu.add_command(label = 'Do you like math?', command = lambda: call(30))
+	surveymenu.add_command(label = 'Done problems like these before?', command = lambda: call(31))
+	surveymenu.add_command(label = 'Hard when you started?', command = lambda: call(32))
 
-	b5 = Button(root, text = 'What\'s next?', command = lambda: call(5), width = 17)
-	b5.grid(row = 3,column = 2)
+	menubar.add_cascade(label = 'Survey', menu = surveymenu)
 
-	b8 = Button(root, text = 'How do we do that?', command = lambda: call(8), width = 17)
-	b8.grid(row = 4)
+	root.config(menu=menubar)
 
-	b13 = Button(root, text = 'Nevermind, go on.', command = lambda: call(13), width = 17)
-	b13.grid(row = 4,column = 1)
+	#------------- Button Control Options-------------
 
-	# Math
-	mathL = Label(root, text = "Math")
-	mathL.grid(row = 5,column = 1)
+	buttons = Frame(root, width = 655, height = 365, pady = 3)
+	buttons.grid(row =0, sticky = "nsew")
 
-	b3 = Button(root, text = 'We multiply?', command = lambda: call(3), width = 17)
-	b3.grid(row = 6)
+	# Make Nico turn his head 
+	turns = Label(buttons, text = "Move Head")
+	forward = Button(buttons, text = "Face forward", command = lambda: call(0), width = 17)
+	left = Button(buttons, text = "Turn Head Left", command = lambda: call(33), width = 17)
+	right = Button(buttons, text = "Turn Head Right", command = lambda: call(34), width = 17)
+	nod = Button(buttons, text = "Nod Head Yes", command = lambda: call(35), width = 17)
+	next = Button(buttons, text = "Click Next", command = lambda: call(29), width = 17, bg = "lavender")
 
-	b19 = Button(root, text = 'We divide?', command = lambda: call(19), width = 17)
-	b19.grid(row = 6,column = 1)
+	turns.grid(row = 0, columnspan = 2)
+	forward.grid(row = 1)
+	left.grid(row = 1, column = 1)
+	next.grid(row = 1, column = 2)
+	right.grid(row = 2)
+	nod.grid(row = 2, column = 1)
 
-	b4 = Button(root, text = 'We add?', command = lambda: call(4), width = 17)
-	b4.grid(row = 6,column = 2)
+	#------------- Text entry options -------------
+	textop = Frame(root, width = 655, height = 100, pady = 3)
+	textop.grid(row = 2, sticky = "nsew")
 
-	b21 = Button(root, text = 'How\'d we get that #?', command = lambda: call(21), width = 17)
-	b21.grid(row = 7)
-
-	# ask for explanation
-	explain = Label(root, text = "Ask for explanation")
-	explain.grid(row = 8,column = 1)
-
-	b7 = Button(root, text = 'That was a lot.', command = lambda: call(7), width = 17)
-	b7.grid(row = 9)
-
-	b11 = Button(root, text = 'Seems complicated.', command = lambda: call(11), width = 17)
-	b11.grid(row = 9,column = 1)
-
-	b12 = Button(root, text = 'Explain that again?', command = lambda: call(12), width = 17)
-	b12.grid(row = 9,column = 2)
-
-	b15 = Button(root, text = 'Don\'t know. Hint?', command = lambda: call(15), width = 17)
-	b15.grid(row = 10)
-
-	# endro
-	endL = Label(root, text = "End Interaction")
-	endL.grid(row = 11,column = 1)
-
-	b6 = Button(root, text = 'I understand now', command = lambda: call(6), width = 17)
-	b6.grid(row = 12)
-
-	b9 = Button(root, text = 'Solved the problem!', command = lambda: call(9), width = 17)
-	b9.grid(row = 12,column = 1)
-
-	b10 = Button(root, text = 'Thank you!', command = lambda: call(10), width = 17)
-	b10.grid(row = 12,column = 2)
-
-	b14 = Button(root, text = 'Getting tired. Later?', command = lambda: call(14), width = 17)
-	b14.grid(row = 13)
-
-	#Misc
-	other = Label(root, text = "Other")
-	other.grid(row = 14,column = 1)
-
-	b17 = Button(root, text = 'Green paint?', command = lambda: call(17), width = 17)
-	b17.grid(row = 15,column = 1)
-
-	# Make Nico turn his head to face forward
-	b0 = Button(root, text = "Face forward", command = lambda: call(0), width = 17)
-	b0.grid(row = 15)
+	textLabel = Label(textop, text = "Text entry options")
+	textLabel.grid(row = 0, columnspan = 4)
 
 	# Enter anything for Nico to say
-	eLabel =  Label(root,text = "Enter text:")
-	eLabel.grid(row = 16)
-	entry = Entry()
-	entry.grid(row = 16,column = 1)
-
-	eText = ""
+	eLabel =  Label(textop,text = "Enter text:")
+	entry = Entry(textop)
 
 	def onclick(event = None):
 		eText = entry.get()
@@ -125,25 +150,226 @@ def main():
 		entry.delete(0,END)
 
 	root.bind('<Return>', onclick)
+	enter = Button(textop, text = "Enter", command = onclick)
+	eLabel.grid(row = 1)
+	entry.grid(row = 1, column = 1, columnspan = 2)
+	enter.grid(row = 1, column = 3)
 
-	button = Button(root, text = "Enter", command = onclick, width = 17)
-	button.grid(row = 16,column = 2)
+	# Provide an answer
+	answerL = Label(textop, text= "The answer is __")
+	answerE = Entry(textop, width = 4)
 
-	# End the program immediately.
+	def getAns():
+		ans = answerE.get()
+		call("The answer is %s."%ans)
+		answerE.delete(0,END)
+
+	answerSay = Button(textop, text = "Say", command = getAns)
+	answerL.grid(row = 2)
+	answerE.grid(row = 2, column = 1, columnspan = 2)
+	answerSay.grid(row = 2, column = 3)
+	
+
+	multL = Label(textop, text = "We multiply __ and __")
+	multE1 = Entry(textop, width = 4)
+	multE2 = Entry(textop, width = 4)
+	def getMult():
+		m1 = multE1.get()
+		m2 = multE2.get()
+		call("We multiply %s and %s?"%(m1, m2))
+		multE1.delete(0,END)
+		multE2.delete(0,END)
+	multSay = Button(textop, text = "Say", command = getMult)
+
+	multL.grid(row = 3)
+	multE1.grid(row = 3, column = 1)
+	multE2.grid(row = 3, column = 2)
+	multSay.grid(row = 3, column = 3)
+
+	subL = Label(textop, text = "We subtract __ from __")
+	subE1 = Entry(textop, width = 4)
+	subE2 = Entry(textop, width = 4)
+	def getSub():
+		a1 = subE1.get()
+		a2 = subE2.get()
+		call("We subtract %s from %s?"%(a1, a2))
+		subE1.delete(0,END)
+		subE2.delete(0,END)
+	subSay = Button(textop, text = "Say", command = getSub)
+
+	subL.grid(row = 4)
+	subE1.grid(row = 4, column = 1)
+	subE2.grid(row = 4, column = 2)
+	subSay.grid(row = 4, column = 3)
+
+	divL = Label(textop, text = "We divide __ by __ ")
+	divE1 = Entry(textop, width = 4)
+	divE2 = Entry(textop, width = 4)
+	def getDiv():
+		d1 = divE1.get()
+		d2 = divE2.get()
+		call("We divide %s by %s?"%(d1, d2))
+		divE1.delete(0,END)
+		divE2.delete(0,END)
+	divSay = Button(textop, text = "Say", command = getDiv)
+
+	divL.grid(row = 5)
+	divE1.grid(row = 5, column = 1)
+	divE2.grid(row = 5, column = 2)
+	divSay.grid(row = 5, column = 3)
+
+	meanL = Label(textop, text = "Do you mean __?")
+	meanE = Entry(textop, width = 4)
+	def getMean():
+		m = meanE.get()
+		call("Do you mean %s"%m)
+		meanE.delete(0,END)
+	meanSay = Button(textop, text = "Say", command = getMean)
+
+	meanL.grid(row = 6)
+	meanE.grid(row = 6, column = 1, columnspan = 2)
+	meanSay.grid(row = 6, column = 3)
+
+	# separator
+	sep1 = Frame(textop, height=2, bd=1, relief=SUNKEN, width = 450)
+	sep1.grid(row = 7, columnspan = 4)
+
+	# Paint Problem
+
+	paintL = Label(textop, text = "I need __ fl oz")
+	paintE = Entry(textop, width = 4)
+	def getPaint():
+		p = paintE.get()
+		call("I need %s fluid ounces of paint."%p)
+		paintE.delete(0,END)
+	paintSay =  Button(textop, text = "Say", command = getPaint)
+
+	paintL.grid(row = 8)
+	paintE.grid(row = 8, column = 1, columnspan = 2)
+	paintSay.grid(row = 8, column = 3)
+
+	inchL = Label(textop, text = "It'll cover __ sq in")
+	inchE = Entry(textop, width = 4)
+	def getInch():
+		i = inchE.get()
+		call("It will cover %s square inches."%i)
+		inchE.delete(0,END)
+	inchSay =  Button(textop, text = "Say", command = getInch)
+
+	inchL.grid(row = 9)
+	inchE.grid(row = 9, column = 1, columnspan = 2)
+	inchSay.grid(row = 9, column = 3)
+
+	coverL = Label(textop, text = "Need __ ounces to cover __ in")
+	coverE1 = Entry(textop, width = 4)
+	coverE2 = Entry(textop, width = 4)
+	def getCover():
+		c1 = coverE1.get()
+		c2 = coverE2.get()
+		call("I need %s fluid ounces of paint to  cover %s square inches."%(c1, c2))
+		coverE1.delete(0,END)
+		coverE2.delete(0,END)
+	coverSay = Button(textop, text = "Say", command = getCover)
+
+	coverL.grid(row = 10)
+	coverE1.grid(row = 10, column = 1)
+	coverE2.grid(row = 10, column = 2)
+	coverSay.grid(row = 10, column = 3)
+
+	# separator
+	sep2 = Frame(textop, height=2, bd=1, relief=SUNKEN, width = 450)
+	sep2.grid(row = 11, columnspan = 4)
+
+	# Driving problem
+	timeL = Label(textop, text = "Traveling for __ hrs")
+	timeE = Entry(textop, width = 4)
+	def getTime():
+		t = timeE.get()
+		call("I will be traveling for %s hours."%t)
+		timeE.delete(0,END)
+	timeSay =  Button(textop, text = "Say", command = getTime)
+
+	timeL.grid(row = 12)
+	timeE.grid(row = 12, column = 1, columnspan = 2)
+	timeSay.grid(row = 12, column = 3)
+
+	mileL = Label(textop, text = "Traveled __ mi")
+	mileE = Entry(textop, width = 4)
+	def getMile():
+		p = mileE.get()
+		call("I will travel %s miles."%p)
+		mileE.delete(0,END)
+	mileSay =  Button(textop, text = "Say", command = getMile)
+
+	mileL.grid(row = 13)
+	mileE.grid(row = 13, column = 1, columnspan = 2)
+	mileSay.grid(row = 13, column = 3)
+
+	travL = Label(textop, text = "Travel __ mi in __ hrs")
+	travE1 = Entry(textop, width = 4)
+	travE2 = Entry(textop, width = 4)
+	def getTrav():
+		c1 = travE1.get()
+		c2 = travE2.get()
+		call("I will travel %s miles in %s hours."%(c1, c2))
+		travE1.delete(0,END)
+		travE2.delete(0,END)
+	travSay = Button(textop, text = "Say", command = getTrav)
+
+	travL.grid(row = 14)
+	travE1.grid(row = 14, column = 1)
+	travE2.grid(row = 14, column = 2)
+	travSay.grid(row = 14, column = 3)
+
+	# separator
+	sep3 = Frame(textop, height=2, bd=1, relief=SUNKEN, width = 450)
+	sep3.grid(row = 15, columnspan = 4)
+
+	# Swimming problem
+	shoreL = Label(textop, text = "Be __ ft from shore")
+	shoreE = Entry(textop, width = 4)
+	def getShore():
+		p = shoreE.get()
+		call("I will be %s feet from the shore."%p)
+		shoreE.delete(0,END)
+	shoreSay =  Button(textop, text = "Say", command = getShore)
+
+	shoreL.grid(row = 16)
+	shoreE.grid(row = 16, column = 1, columnspan = 2)
+	shoreSay.grid(row = 16, column = 3)
+
+	swimL = Label(textop, text = "Swim __ ft")
+	swimE = Entry(textop, width = 4)
+	def getSwim():
+		p = swimE.get()
+		call("I will have swam %s feet."%p)
+		swimE.delete(0,END)
+	swimSay =  Button(textop, text = "Say", command = getSwim)
+
+	swimL.grid(row = 17)
+	swimE.grid(row = 17, column = 1, columnspan = 2)
+	swimSay.grid(row = 17, column = 3)
+
+	secL = Label(textop, text = "Swam __ secs")
+	secE = Entry(textop, width = 4)
+	def getSec():
+		p = secE.get()
+		call("I will have swam for %s seconds."%p)
+		secE.delete(0,END)
+	secSay =  Button(textop, text = "Say", command = getSec)
+
+	secL.grid(row = 18)
+	secE.grid(row = 18, column = 1, columnspan = 2)
+	secSay.grid(row = 18, column = 3)
+
+	#------------- End the program immediately. -------------
 	bEnd = Button(root, text = "End program", command = exit, width = 17, bg = 'red')
-	bEnd.grid(row = 17, column = 1)
+	bEnd.grid(row = 3)
 
-	#kick off the event loop
-	root.mainloop()
 
+
+#------------- MAIN -------------
 if __name__ ==  "__main__":
 	main()
-	"""
-	filepath = "/home/nao/programs/move.top"
-	#ad.main()
-	args = shlex.split('python adialog_new.py')
-	#subprocess.Popen(["python", "adialog_new.py"])
-	p = subprocess.call(['gnome-terminal', '-x', 'bash', '-c','python adialog.py'])
-	#Thread(target = func2).start()
-	subprocess.kill()
-	"""
+	#kick off the event loop
+	root.mainloop()

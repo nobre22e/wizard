@@ -11,112 +11,139 @@ except Exception,e:
 	sys.exit(1)
 
 dialog = {
-	  ########## casual response ##############
-	  '1': "Hi" , \
-	  '16': "Yes I'm very excited.", \
-	  '18': "Okay!", \
-	  ######## prompting the user to go on ############
-	  '20': "I want to learn how to solve this problem!", \
-	  '2': "How do you solve this problem?", \
-	  '5': "What do we do next?", \
-	  '8': "How do we do that?", \
-	  '13': "Nevermind. Please go on.", \
-	  ######## response to specific solutions #########
-	  '3': "Okay now we mul tip ly?",\
-	  '4': "Okay now we add?", \
-	  '17': "Green paint?", \
-	  '19': "Okay so we divide?", \
-	  '21': "How did we get that number?", \
-	  ######## confused ##################
-	  '7': "That was a lot of information. Could you break it down into parts?", \
-	  '11': "Hmmm. That part seems complicated to me. Can you explain that again?", \
-	  '12': "Sorry, I was daydreaming. Could you explain that again?", \
-	  '15': "I don't know. Could you give me some hints?", \
+	######## Introduction ########
+	'1': "Hello! My name is Neeco. How are you doing today?" ,
+	'2': "I'm ready to learn mahth! Do you have any problems for me to solve?",
+	'3': "What problems are we solving today?",
+	'4': "I want to learn how to solve this problem!",
+	######## Confirmation ########
+	'5': "Okay!",
+	'6': "Yes!",
+	'7': "Yes, I agree.",
+	######## Asking Questions #######
+	'8': "How do you solve this problem?",
+	'9': "What do we do next?",
+	'10': "How do we do that?",
+	'28': "How should we start?",
+	'11': "Could you give me more information?",
+	'12': "Okay now we mul tip ly?",
+	'13': "Okay now we subtract?",
+	'14': "Okay so we divide?",
+	'15': "Is this correct?",
+	######## Confusion ########
+	'16': "How did we get that number?",
+	'17': "Could you break that down into parts?",
+	'18': "Hmmm. That part seems complicated to me. Can you explain that again?",
+	'19': "I don't know. Could you give me some hints?",
+	######## Ending/Understanding ########
+	'20': "I think I understand now.",
+	'21': "I think this is correct.",
+	'22': "Yay, we solved the problem!",
+	'23': "Thank you! You're awesome. You made me feel smarter.",
+	'24': "I'm getting tired now, but I think I understand the problem better. Maybe we can continue this another time.",
+	######## What We Know #######
+	'25': "I know that 1 fluid ounce of paint will cover 3 square inches of my body.",
+	'26': "I know that I can drive 60 miles in 1 hour.",
+	'27': "I know that I can swim 5 feet per second and that the tide is coming in at 2 feet per second.",
+	'29': "Please tap the, next, button for me so we can go on to the next step.",
+	######## Survey Questions ########
+	'30': "Do you like mahth?",
+	'31': "Have you done problems like these before?",
+	'32': "Was it hard when you first started?"
+}
 
-	  ####### end #############
-	  '6': "I think I understand now", \
-	  '9': "Yay we solved the problem!", \
-	  '10': "Thank you! You're awesome. You made me feel smarter.", \
-	  '14': "I'm getting tired now, but I think I understand the problem better. Maybe we can continue this another time." }
-	
+# If the 
+def speak(command_dialog):
+	if command_dialog.isdigit() and (int(command_dialog) <= 32):
+		tts.post.say(dialog[command_dialog])
+	else:
+		tts.say(command_dialog)
 	
 #Hello
 def hello(command_dialog):
-    gesture.wave_hand()
-    tts.say("Hello")
+	gesture.waveRight2()
+	tts.say(dialog[command_dialog])
 
-def yay(command_dialog):
-    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
-    gesture.yay()
-    tts.say(dialog[command_dialog])
-
-def peace(command_dialog):
-    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
-    gesture.peace()
-    tts.say(dialog[command_dialog])
-	    
-#I M LOST
 def shrugAndShakeHead(command_dialog):
-    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
-    #tts.say(dialog[command_dialog])
-    gesture.shrug_and_shakehead()
-    tts.say(dialog[command_dialog])
+	gesture.shrug_and_shakehead()
+	speak(command_dialog)
 
-def oneHandUp(command_dialog):
-    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
-    gesture.one_hand_up()
-    tts.say(dialog[command_dialog])
-
-#nodding
+#nodding yes
 def nod(command_dialog):
-    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
-    gesture.head_yaw()
-    tts.say(dialog[command_dialog])
+    gesture.nodYes()
+    speak(command_dialog)
 
 def fistYay(command_dialog):
-    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
-    gesture.fistYay()
-    tts.say(dialog[command_dialog])
+	gesture.fistYay()
+	speak(command_dialog)
 
-#nodding
+#shaking no
 def shakeHead(command_dialog):
-    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
-    gesture.head_pitch()
-    tts.say(dialog[command_dialog])
+	gesture.shakeNo()
+	speak(command_dialog)
 
-def other(command_dialog):
-    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
-    tts.say(command_dialog)
+def handsHips(command_dialog):
+	gesture.handsOnHips()
+	speak(command_dialog)
 
-def shrug(command_dialog):
-    #tts = ALProxy("ALTextToSpeech", "nico.d.mtholyoke.edu", 9559)
-    gesture.shrug()
-    tts.say(dialog[command_dialog])
+def handOutLeft(command_dialog):
+	gesture.handOutLeft()
+	speak(command_dialog)
+
+def handOutRight(command_dialog):
+	gesture.handOutRight()
+	speak(command_dialog)
+
+def handChestLeft(command_dialog):
+	gesture.handOnChestLeft()
+	speak(command_dialog)
+
+def bigShrug(command_dialog):
+	gesture.largeShrug()
+	speak(command_dialog)
+
+def handLookAndOut(command_dialog):
+	gesture.lookAtNailsRight()
+	speak(command_dialog)
+	gesture.handOutRight2()
+
+def cheer(command_dialog):
+	gesture.cheering()
+	speak(command_dialog)
 
 # Control what to do for built in commands or entered speech
 def sendCmd(inp):
-	if inp == '9' or inp == '16':
-		fistYay(inp)
-	elif inp == '0':
+	if inp == '0':
 		gesture.faceForward()
 	elif inp == '1':
 		hello(inp)
-	elif inp == '2' or inp == '8' or inp == '5' or inp == '17' or inp == '20' or inp == '21':
-		oneHandUp(inp)
-	elif inp == '3' or inp == '4' or inp == '6' or inp == '18' or inp == '19':
+	elif inp in {'2', '3'} or inp[0:6].lower() == "i will" or inp[0:6].lower() == "i need" or inp[0:7].lower() == "it will":
+		handsHips(inp)
+	elif inp == '4':
+		handChestLeft(inp)
+	elif inp in {'5', '6', '7', '12', '13', '14', '20'}:
 		nod(inp)
-	elif inp == '12' or inp == '14':
-		shrug(inp)
-	elif inp == '11' or inp == '15':
+	elif inp in {'8', '9'}:
+		bigShrug(inp)
+	elif inp in {'10', '16', '20', '21', '28','30','32'} or inp[0:2].lower() == "we" or inp[0:2].lower() == "do":
+		handOutLeft(inp)
+	elif inp in {'11', '15', '17', '25', '26', '27', '29','31'} or inp[0:10].lower() == "the answer":
+		handOutRight(inp)
+	elif inp == '18':
+		handLookAndOut(inp)
+	elif inp == '19':
 		shrugAndShakeHead(inp)
-	elif inp == '7' or inp == '13':
+	elif inp == '23':
+		fistYay(inp)
+	elif inp == '22':
+		cheer(inp)
+	elif inp == '24':
 		shakeHead(inp)
-	elif inp == '10':
-		peace(inp)
+	elif inp == '33':
+		gesture.turnHeadLeft()
+	elif inp == '34':
+		gesture.turnHeadRight()
+	elif inp == '35':
+		gesture.nodYes()
 	else:
-		other(inp)
-
-'''TODO:
-	Add logging to text file feature.
-	incorporate adialog_new.py
-'''
+		speak(inp)
